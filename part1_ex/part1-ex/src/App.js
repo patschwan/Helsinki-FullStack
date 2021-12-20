@@ -1,67 +1,27 @@
-import React from 'react'
+// { useState } from "react" ist der Hook
+import React, { useState } from "react";
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }]
-  }
+  const [counter, setCounter] = useState(0);
+
+  // EventHandler als separate Funktionen (besser)
+  const increaseOne = () => setCounter(counter + 1);
+  const decreaseOne = () => setCounter(counter - 1);
+  const setZero = () => setCounter(0);
 
   return (
-    < div >
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
-    </div >
-  )
-}
+    // REMINDER: die EventHandler der Button ändern jeweils den State der Componennt und triggern das Re-Render
+    <div>
+      <Display counter={counter} />
+      <Button onClick={increaseOne} text="plus" />
+      <Button onClick={decreaseOne} text="minus" />
+      <Button onClick={setZero} text="reset" />
+    </div>
+  );
+};
 
-const Header = (props) => {
-  return (
-    <>
-      <h1>{props.course}</h1>
-    </>
-  )
-}
+const Display = ({ counter }) => <div>{counter}</div>;
 
+const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
 
-
-const Content = (props) => {
-  return (
-    <>
-      <Part part={props.parts[0]} />
-      <Part part={props.parts[1]} />
-      <Part part={props.parts[2]} />
-    </>
-  )
-}
-
-const Part = (props) => {
-  // console.log(props);
-  return (
-    <>
-      <p>{props.part.name} {props.part.exercises}</p>
-    </>
-  )
-}
-
-const Total = (props) => {
-  // console.log(props);
-  return (
-    <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
-  )
-}
-
-
-export default App
+export default App;
