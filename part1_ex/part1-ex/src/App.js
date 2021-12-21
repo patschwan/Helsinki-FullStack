@@ -1,27 +1,54 @@
 // { useState } from "react" ist der Hook
 import React, { useState } from "react";
 
-const App = () => {
-  const [counter, setCounter] = useState(0);
+const History = (props) => {
+  if (props.allClicks.length === 0) {
+    return (
+      <div>the app is used by pressing the buttoons</div>
+    )
+  }
+  // if Bedingung nicht erfüllt, das ist der Default!
+  // falls die if bedingung falsch ist, wird der Default angezeigt
+  // hatte legnth geschrieben und der Default wurde angezeigt (kein Fehler!)
+  return (
+    <div>button press History: {props.allClicks.join('')}</div>
+  )
+}
 
-  // EventHandler als separate Funktionen (besser)
-  const increaseOne = () => setCounter(counter + 1);
-  const decreaseOne = () => setCounter(counter - 1);
-  const setZero = () => setCounter(0);
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>{text}</button>
+)
+
+const App = () => {
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
+  const [allClicks, setAll] = useState([])
+
+  const handleLeftClick = () => {
+    // don't use allClicks.push('L')
+    // mutating state directly can lead to 
+    // hard debug errors in more complex scenarios
+    setAll(allClicks.concat('L'))
+    setLeft(left + 1)
+  }
+
+  const handleRightClick = () => {
+    // don't use allClicks.push('R')
+    // mutating state directly can lead to 
+    // hard debug errors in more complex scenarios
+    setAll(allClicks.concat('R'))
+    setRight(right + 1)
+  }
 
   return (
-    // REMINDER: die EventHandler der Button ändern jeweils den State der Componennt und triggern das Re-Render
     <div>
-      <Display counter={counter} />
-      <Button onClick={increaseOne} text="plus" />
-      <Button onClick={decreaseOne} text="minus" />
-      <Button onClick={setZero} text="reset" />
+      {left}
+      <Button handleClick={handleLeftClick} text='left' />
+      <Button handleClick={handleRightClick} text='right' />
+      {right}
+      <History allClicks={allClicks} />
     </div>
-  );
-};
-
-const Display = ({ counter }) => <div>{counter}</div>;
-
-const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
+  )
+}
 
 export default App;
